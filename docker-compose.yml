@@ -1,0 +1,36 @@
+services:
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:latest
+  #   ports:
+  #     - "8443:8443" # Expose Keycloak on port 8443
+  #   environment:
+  #     - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+  #     - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+  #     - JAVA_OPTS=-Djavax.net.ssl.trustStore=/etc/truststore/keystore.jks -Djavax.net.ssl.trustStorePassword=password
+  #   networks:
+  #     - kc-nginx-network
+  #   volumes:
+  #     - ./certs/keystore.jks:/etc/truststore/keystore.jks:ro
+  #     - ./realm-export.json:/opt/keycloak/data/import/master-realm.json
+  #   command: ["start", "--hostname=localhost", "--http-enabled=true", "--db=dev-file", "--import-realm", "--verbose",
+  #    "--https-key-store-file=/etc/truststore/keystore.jks", "--https-key-store-password=password"]
+
+  nginx:
+    image: nginx:latest # Use the official Nginx image
+    ports:
+      - "80:80" # Expose Nginx on port 80
+      - "443:443" # Expose Nginx on port 443
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf # Map your Nginx config
+      - ./certs/cert.pem:/etc/nginx/cert.pem
+      - ./certs/key_no_password.pem:/etc/nginx/key_no_password.pem
+      - ./www:/etc/nginx/www
+    networks:
+      - kc-nginx-network
+    # extra_hosts required to let nginx resolve to the host
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
+
+networks:
+  kc-nginx-network:

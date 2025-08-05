@@ -1,10 +1,35 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import SignIn from "./components/sign-in";
+import SignOut from "./components/sign-out";
 
-export default function Home() {
+import { auth } from "@/auth"
+import { aServerAction } from "@/app/lib/actions";
+import PostUsersButton from "./components/post-users-btn";
+
+export default async function Home() {
+
+  const session = await auth();
+  console.log("Session:", session);
+  //if (!session) return <div>Not authenticated</div>
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
+        {session ? <div>Authenticated<SignOut /></div> : <div>Not authenticated<SignIn /></div>}
+        {/* <SignIn /> */}
+        <form action={aServerAction}>
+          <input
+            id="a-key"
+            name="aKey"
+            type="text"
+            placeholder="Enter a value"
+            defaultValue="foo"
+          />
+        </form>
+
+        <PostUsersButton />
+
         <Image
           className={styles.logo}
           src="/next.svg"

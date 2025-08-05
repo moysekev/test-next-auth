@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Call POST /api/users</title>
+</head>
+
+<body>
+    <button id="createUserBtn">Create User</button>
+
+    <script>
+        document.getElementById('createUserBtn').addEventListener('click', () => {
+            // Data to send in the POST request
+            const data = {
+                name: 'John Doe',
+                email: 'john@example.com'
+            };
+
+            fetch('https://app.domain.local/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Success:', result);
+                    alert('User created successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error creating user.');
+                });
+        });
+    </script>
+
+
+    <form action="https://app.domain.local/api/users" method="POST" enctype="multipart/form-data">
+        <!-- Hidden action ID field -->
+        <input type="hidden" name="foo" value="bar">
+        <button type="submit">Click me</button>
+    </form>
+</body>
+
+</html>
