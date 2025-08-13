@@ -43,6 +43,10 @@ declare module "next-auth/jwt" {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [Keycloak],
+    // The AUTH_TRUST_HOST environment variable serves the same purpose as setting trustHost: true in your Auth.js configuration.
+    // This is necessary when running Auth.js behind a proxy.
+    // When set to true we will trust the X-Forwarded-Host and X-Forwarded-Proto headers passed to the app
+    // by the proxy to auto-detect the host URL (AUTH_URL)
     // trustHost: true,
     cookies: {
         csrfToken: {
